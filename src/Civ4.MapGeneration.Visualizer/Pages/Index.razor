@@ -1,5 +1,54 @@
 ﻿@page "/"
 
+@using Civ4.MapGeneration.Layers.Landmasses;
+
 <h1>Civ4 Map Visualizer</h1>
 
+@if (Dimensions != null && Landmass != null)
+{
+    <div class="grid-container" style="
+        display: grid;
+        --grid-cols: @Dimensions.Width;
+        --grid-rows: @Dimensions.Height;
+        grid-template-rows: repeat(var(--grid-rows), 0fr);
+        grid-template-columns: repeat(var(--grid-cols), 0fr)">
+        @for (int i = 0; i < Dimensions.Width; i++)
+        {
+            for (int j = 0; j < Dimensions.Height; j++)
+            {
+                var isLand = Landmass.Tiles.Any(t => t.Location.X == i && t.Location.Y == j);
 
+                if (isLand)
+                {
+                    <div style="background-color:#2da84e; height: 25px; width: 25px"></div>
+                }
+                else
+                {
+                    <div style="background-color:#1c52d9; height: 25px; width: 25px"></div>
+                }
+            }
+        }
+    </div>
+}
+
+@code {
+
+    public Landmass Landmass { get; set; }
+
+    public Dimensions Dimensions { get; set; }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("Generating landmass");
+
+            Dimensions = new Dimensions(15, 15);
+            Landmass = Landmass.Build(Dimensions);
+
+            StateHasChanged();
+        }
+
+        return Task.CompletedTask;
+    }
+}

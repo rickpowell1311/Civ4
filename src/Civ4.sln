@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30021.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Civ4", "Civ4\Civ4.csproj", "{4781B9E3-118E-4E67-A7D4-9D302EEF1E13}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E867DCEF-1BA5-472C-B4F3-565C0ACEC0B8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_SolutionItems", "_SolutionItems", "{E867DCEF-1BA5-472C-B4F3-565C0ACEC0B8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
