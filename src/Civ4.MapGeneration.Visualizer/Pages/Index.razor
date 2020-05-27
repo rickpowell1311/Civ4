@@ -6,29 +6,33 @@
 
 @if (Dimensions != null && Landmass != null)
 {
-    <div class="grid-container" style="
+<div class="grid-container" style="
         display: grid;
         --grid-cols: @Dimensions.Width;
         --grid-rows: @Dimensions.Height;
         grid-template-rows: repeat(var(--grid-rows), 0fr);
         grid-template-columns: repeat(var(--grid-cols), 0fr)">
-        @for (int i = 0; i < Dimensions.Width; i++)
+        @for (int j = Dimensions.Height; j >= 0; j--)
         {
-            for (int j = 0; j < Dimensions.Height; j++)
+            for (int i = 0; i < Dimensions.Width; i++)
             {
                 var isLand = Landmass.Tiles.Any(t => t.Location.X == i && t.Location.Y == j);
 
                 if (isLand)
                 {
-                    <div style="background-color:#2da84e; height: 25px; width: 25px"></div>
+                    <div style="background-color:#2da84e; height: 50px; width: 50px">
+                        (@i, @j)
+                    </div>
                 }
                 else
                 {
-                    <div style="background-color:#1c52d9; height: 25px; width: 25px"></div>
+                    <div style="background-color:#1c52d9; height: 50px; width: 50px">
+                        (@i, @j)
+                    </div>
                 }
             }
         }
-    </div>
+</div>
 }
 
 @code {
@@ -43,7 +47,7 @@
         {
             Console.WriteLine("Generating landmass");
 
-            Dimensions = new Dimensions(15, 15);
+            Dimensions = new Dimensions(10, 15);
             Landmass = Landmass.Build(Dimensions);
 
             StateHasChanged();
