@@ -53,7 +53,7 @@ namespace Civ4.MapGeneration.Layers.Landmasses
             return false;
         }
 
-        public SeedGroup MoveIntoBoundary()
+        public SeedGroup MoveAwayFromBoundary()
         {
             var isAtBoundaryMinWidth = _chosenTiles.Any(x => x.IsAtMinWidth(_boundary));
             var isAtBoundaryMinHeight = _chosenTiles.Any(x => x.IsAtMinHeight(_boundary));

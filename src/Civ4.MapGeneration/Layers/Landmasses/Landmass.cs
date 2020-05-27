@@ -35,7 +35,7 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 
                 // Centralize the seed groups to avoid truncating the seed group shapes at the boundary edges
                 seedGroups = seedGroups
-                    .Select(x => x.MoveIntoBoundary())
+                    .Select(x => x.MoveAwayFromBoundary())
                     .ToHashSet();
             }
 
