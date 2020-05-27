@@ -6,24 +6,31 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 {
     public class TileChoices
     {
-        private readonly IEnumerable<Tile> _tiles;
+        private readonly Tile _currentTile;
+        private readonly IEnumerable<Tile> _availableTiles;
         private readonly Boundary _boundary;
         private readonly SeedGroup _seedGroup;
 
-        public TileChoices(IEnumerable<Tile> tiles, Boundary boundary, SeedGroup seedGroup)
+        public TileChoices(Tile currentTile, IEnumerable<Tile> availableTiles, Boundary boundary, SeedGroup seedGroup)
         {
-            _tiles = tiles;
+            _currentTile = currentTile;
+            _availableTiles = availableTiles;
             _boundary = boundary;
             _seedGroup = seedGroup;
         }
 
         public Tile ChooseOne()
         {
-            var choices = _tiles
-                .Select(x => new TileChoice(
-                    x,
-                    x.IsAlongBoundary(_boundary),
-                    _seedGroup.Tiles.Any(y => y.IsAdjecentTo(x))))
+            var choices = _availableTiles
+                .Select(x =>
+                {
+                    var isAlongBoundary = x.IsAlongBoundary(_boundary);
+                    var isAdjacentToTileGroup = _seedGroup.Tiles.Any(y => y.IsAdjecentTo(x));
+                    var isTowardsBoundaryCenterPoint =
+                        _boundary.Center.DistanceFrom(x.Location) < _boundary.Center.DistanceFrom(_currentTile.Location);
+
+                    return new TileChoice(x, isAlongBoundary, isAdjacentToTileGroup, isTowardsBoundaryCenterPoint);
+                })
                 .ToHashSet();
 
             var choicePicker = new ChoicePicker<Tile>();

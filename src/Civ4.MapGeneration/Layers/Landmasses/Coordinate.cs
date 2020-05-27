@@ -8,10 +8,22 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 
         public int Y { get; }
 
+        public double DistanceFromOrigin => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+
         public Coordinate(int x, int y)
         {
             X = x;
             Y = y;
+        }
+
+        public Coordinate RelativeLocationTo(Coordinate other)
+        {
+            return new Coordinate(other.X - X, other.Y - Y);
+        }
+
+        public double DistanceFrom(Coordinate other)
+        {
+            return RelativeLocationTo(other).DistanceFromOrigin;
         }
 
         public override bool Equals(object obj)

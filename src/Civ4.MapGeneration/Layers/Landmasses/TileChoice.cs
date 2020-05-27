@@ -9,21 +9,37 @@ namespace Civ4.MapGeneration.Layers.Landmasses
         public Tile Tile { get; }
 
         public bool IsAdjacentToTileGroup { get; }
-
+        public bool IsTowardsBoundaryCenterPoint { get; }
         public bool IsAlongBoundary { get; }
 
-        public TileChoice(Tile tile, bool isAlongBoundary, bool isAdjacentToTileGroup)
+        public TileChoice(Tile tile, bool isAlongBoundary, bool isAdjacentToTileGroup, bool isTowardsBoundaryCenterPoint)
         {
             Tile = tile;
             IsAdjacentToTileGroup = isAdjacentToTileGroup;
+            IsTowardsBoundaryCenterPoint = isTowardsBoundaryCenterPoint;
             IsAlongBoundary = isAlongBoundary;
         }
 
         public double GetProbabilityWeighting()
         {
-            return IsAlongBoundary ? 1d
-                : IsAdjacentToTileGroup ? 4d 
-                : 2d;
+            var @default = 2d;
+
+            if (IsTowardsBoundaryCenterPoint)
+            {
+                return 12d;
+            }
+
+            if (IsAdjacentToTileGroup)
+            {
+                return 3d;
+            }
+
+            if (IsAlongBoundary)
+            {
+                return 1d;
+            }
+
+            return @default;
         }
 
         public override bool Equals(object obj)

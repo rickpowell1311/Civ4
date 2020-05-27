@@ -97,7 +97,7 @@ namespace Civ4.MapGeneration.Layers.Landmasses
                 return false;
             }
 
-            var choices = new TileChoices(availableTiles, _boundary, this);
+            var choices = new TileChoices(tile, availableTiles, _boundary, this);
             next = choices.ChooseOne();
             return next != null;
         }

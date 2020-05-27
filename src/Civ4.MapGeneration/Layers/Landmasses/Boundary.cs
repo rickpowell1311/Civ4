@@ -20,6 +20,8 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 
         public int Area => Width * Height;
 
+        public Coordinate Center => new Coordinate(MaxX - (Width / 2), MaxY - (Height / 2));
+
         private HashSet<Coordinate> ContainedCoordinates
         {
             get
