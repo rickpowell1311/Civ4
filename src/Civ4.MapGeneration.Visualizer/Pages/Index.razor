@@ -12,15 +12,22 @@
         --grid-rows: @Boundary.Height;
         grid-template-rows: repeat(var(--grid-rows), 0fr);
         grid-template-columns: repeat(var(--grid-cols), 0fr)">
-        @for (int j = Boundary.Height; j >= 0; j--)
+        @for (int j = Boundary.Height - 1; j >= 0; j--)
         {
             for (int i = 0; i < Boundary.Width; i++)
             {
                 var isLand = LandTiles.Any(t => t.Location.X == i && t.Location.Y == j);
+                var isIce = !isLand ? IceTiles.Any(t => t.Location.X == i && t.Location.Y == j) : false;
 
                 if (isLand)
                 {
                     <div style="background-color:#2da84e; height: 20px; width: 20px; font-size: 6px;">
+                        (@i,@j)
+                    </div>
+                }
+                else if (isIce)
+                {
+                    <div style="background-color:#c5d4eb; height: 20px; width: 20px; font-size: 6px;">
                         (@i,@j)
                     </div>
                 }
@@ -39,6 +46,8 @@
 
     public List<Tile> LandTiles { get; set; }
 
+    public List<Tile> IceTiles { get; set; }
+
     public Boundary Boundary { get; set; }
 
     protected override Task OnAfterRenderAsync(bool firstRender)
@@ -49,10 +58,12 @@
 
             var dimensions = new Dimensions(60, 35);
             Boundary = Boundary.FromDimensions(dimensions, 0, 0);
-            LandTiles = World.Continents(dimensions, 2)
-                .LandTiles
-                .ToList();
-            
+
+            var world = World.Continents(dimensions, 2);
+
+            LandTiles = world.LandTiles.ToList();
+            IceTiles = world.IceTiles.ToList();
+
             StateHasChanged();
         }
 

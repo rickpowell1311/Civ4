@@ -79,4 +79,43 @@ namespace Civ4.MapGeneration.Layers.Landmasses
             return !(first == second);
         }
     }
+
+    public static partial class BoundaryExtensions
+    {
+        public static bool IsWithinBoundary(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.X >= boundary.MinX
+                && tile.Location.X <= boundary.MaxX
+                && tile.Location.Y >= boundary.MinY
+                && tile.Location.Y <= boundary.MaxY;
+        }
+
+        public static bool IsAtMinWidth(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.X == boundary.MinX;
+        }
+
+        public static bool IsAtMaxWidth(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.X == boundary.MaxX;
+        }
+
+        public static bool IsAtMinHeight(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.Y == boundary.MinY;
+        }
+
+        public static bool IsAtMaxHeight(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.Y == boundary.MaxY;
+        }
+
+        public static bool IsAlongBoundary(this Tile tile, Boundary boundary)
+        {
+            return tile.IsAtMinWidth(boundary)
+                || tile.IsAtMinHeight(boundary)
+                || tile.IsAtMaxWidth(boundary)
+                || tile.IsAtMaxHeight(boundary);
+        }
+    }
 }

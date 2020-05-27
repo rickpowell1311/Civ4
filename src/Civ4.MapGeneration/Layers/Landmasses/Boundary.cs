@@ -14,9 +14,9 @@ namespace Civ4.MapGeneration.Layers.Landmasses
         
         public int MinY { get; }
 
-        public int Width => MaxX - MinX + 1;
+        public int Width => Math.Abs(MaxX) - Math.Abs(MinX) + 1;
 
-        public int Height => MaxY - MinY + 1;
+        public int Height => Math.Abs(MaxY) - Math.Abs(MinY) + 1;
 
         public int Area => Width * Height;
 
@@ -76,6 +76,62 @@ namespace Civ4.MapGeneration.Layers.Landmasses
                 .ToList();
         }
 
+        public (Boundary Top, Boundary Bottom) CutHorizontally(int y)
+        {
+            var bottomDimensions = new Dimensions(Width, y - MinY);
+            var topDimensions = new Dimensions(Width, Height - bottomDimensions.Height);
+
+            var bottom = FromDimensions(
+                bottomDimensions,
+                MinX,
+                MinY);
+
+            var top = FromDimensions(
+                topDimensions,
+                MinX,
+                MinY + bottomDimensions.Height);
+
+            return (top, bottom);
+        }
+
+        public (Boundary Left, Boundary Right) CutVertically(int x)
+        {
+            var leftDimensions = new Dimensions(x - MinX, Height);
+            var rightDimensions = new Dimensions(Width - leftDimensions.Width, Height);
+
+            var left = FromDimensions(
+                leftDimensions,
+                MinX,
+                MinY);
+
+            var right = FromDimensions(
+                rightDimensions,
+                MinX + leftDimensions.Width,
+                MinY);
+
+            return (left, right);
+        }
+
+        public Boundary TrimRight(int width)
+        {
+            return CutVertically(MinX + Width - width).Left;
+        }
+
+        public Boundary TrimLeft(int width)
+        {
+            return CutVertically(MinX + width).Right;
+        }
+
+        public Boundary TrimTop(int height)
+        {
+            return CutHorizontally(MinY + Height - height).Bottom;
+        }
+
+        public Boundary TrimBottom(int height)
+        {
+            return CutHorizontally(height).Top;
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as Boundary);
@@ -106,45 +162,6 @@ namespace Civ4.MapGeneration.Layers.Landmasses
         public static bool operator !=(Boundary first, Boundary second)
         {
             return !(first == second);
-        }
-    }
-
-    public static class TileExtensions
-    {
-        public static bool IsWithinBoundary(this Tile tile, Boundary boundary)
-        {
-            return tile.Location.X >= boundary.MinX
-                && tile.Location.X <= boundary.MaxX
-                && tile.Location.Y >= boundary.MinY
-                && tile.Location.Y <= boundary.MaxY;
-        }
-
-        public static bool IsAtMinWidth(this Tile tile, Boundary boundary)
-        {
-            return tile.Location.X == boundary.MinX;
-        }
-
-        public static bool IsAtMaxWidth(this Tile tile, Boundary boundary)
-        {
-            return tile.Location.X == boundary.MaxX;
-        }
-
-        public static bool IsAtMinHeight(this Tile tile, Boundary boundary)
-        {
-            return tile.Location.Y == boundary.MinY;
-        }
-
-        public static bool IsAtMaxHeight(this Tile tile, Boundary boundary)
-        {
-            return tile.Location.Y == boundary.MaxY;
-        }
-
-        public static bool IsAlongBoundary(this Tile tile, Boundary boundary)
-        {
-            return tile.IsAtMinWidth(boundary)
-                || tile.IsAtMinHeight(boundary)
-                || tile.IsAtMaxWidth(boundary)
-                || tile.IsAtMaxHeight(boundary);
         }
     }
 }
