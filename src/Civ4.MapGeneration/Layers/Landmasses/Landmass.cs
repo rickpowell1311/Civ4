@@ -19,8 +19,8 @@ namespace Civ4.MapGeneration.Layers.Landmasses
             // Create a boundary for the landmass to be built within - build boundary with positive coordinates for readability
             var boundary = Boundary.FromDimensions(dimensions, 0, 0);
 
-            // Place 1 seed in every 10 tiles if not specified
-            var numberOfSeeds = numberOfSeedGroups ?? dimensions.Area / 10 + 1;
+            // Place 1 seed in every 6 tiles if not specified
+            var numberOfSeeds = numberOfSeedGroups ?? dimensions.Area / 6 + 1;
             var seedGroups = boundary
                 .GenerateSeedGroups(numberOfSeeds)
                 .ToHashSet();
@@ -32,6 +32,11 @@ namespace Civ4.MapGeneration.Layers.Landmasses
                 {
                     seedGroup.Grow();
                 }
+
+                // Centralize the seed groups to avoid truncating the seed group shapes at the boundary edges
+                seedGroups = seedGroups
+                    .Select(x => x.MoveIntoBoundary())
+                    .ToHashSet();
             }
 
             return new Landmass(seedGroups);

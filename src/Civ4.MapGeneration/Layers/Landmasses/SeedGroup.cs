@@ -53,6 +53,36 @@ namespace Civ4.MapGeneration.Layers.Landmasses
             return false;
         }
 
+        public SeedGroup MoveIntoBoundary()
+        {
+            var isAtBoundaryMinWidth = _chosenTiles.Any(x => x.IsAtMinWidth(_boundary));
+            var isAtBoundaryMinHeight = _chosenTiles.Any(x => x.IsAtMinHeight(_boundary));
+            var isAtBoundaryMaxWidth = _chosenTiles.Any(x => x.IsAtMaxWidth(_boundary));
+            var isAtBoundaryMaxHeight = _chosenTiles.Any(x => x.IsAtMaxHeight(_boundary));
+
+            var minWidthAdjustment = isAtBoundaryMinWidth ? +1 : 0;
+            var maxWidthAdjustment = isAtBoundaryMaxWidth ? -1 : 0;
+            var minHeightAdjustment = isAtBoundaryMinHeight ? +1 : 0;
+            var maxHeightAdjustment = isAtBoundaryMaxHeight ? -1 : 0;
+
+            var widthAdjustment = minWidthAdjustment + maxWidthAdjustment;
+            var heightAdjustment = minHeightAdjustment + maxHeightAdjustment;
+
+            var moved = new SeedGroup(Seed, _boundary);
+
+            foreach (var chosenTile in _chosenTiles)
+            {
+                var movedTile = new Tile(
+                    new Coordinate(
+                        chosenTile.Location.X + widthAdjustment, 
+                        chosenTile.Location.Y + heightAdjustment));
+
+                moved._chosenTiles.Add(movedTile);
+            }
+
+            return moved;
+        }
+
         private bool TryPickNextTile(Tile tile, out Tile next)
         {
             var neighbours = tile.Neighbours.ToHashSet();

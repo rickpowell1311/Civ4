@@ -111,12 +111,32 @@ namespace Civ4.MapGeneration.Layers.Landmasses
                 && tile.Location.Y <= boundary.MaxY;
         }
 
+        public static bool IsAtMinWidth(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.X == boundary.MinX;
+        }
+
+        public static bool IsAtMaxWidth(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.X == boundary.MaxX;
+        }
+
+        public static bool IsAtMinHeight(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.Y == boundary.MinY;
+        }
+
+        public static bool IsAtMaxHeight(this Tile tile, Boundary boundary)
+        {
+            return tile.Location.Y == boundary.MaxY;
+        }
+
         public static bool IsAlongBoundary(this Tile tile, Boundary boundary)
         {
-            return tile.Location.X == boundary.MinX
-                || tile.Location.X == boundary.MaxX
-                || tile.Location.Y == boundary.MaxY
-                || tile.Location.Y == boundary.MinY;
+            return tile.IsAtMinWidth(boundary)
+                || tile.IsAtMinHeight(boundary)
+                || tile.IsAtMaxWidth(boundary)
+                || tile.IsAtMaxHeight(boundary);
         }
     }
 }
