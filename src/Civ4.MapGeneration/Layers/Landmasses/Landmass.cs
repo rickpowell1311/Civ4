@@ -16,8 +16,8 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 
         public static Landmass Build(Boundary boundary, int? numberOfSeedGroups = default)
         {
-            // Place 1 seed in every 6 tiles if not specified
-            var numberOfSeeds = numberOfSeedGroups ?? boundary.Area / 6 + 1;
+            // Place 1 seed in every 24 tiles if not specified
+            var numberOfSeeds = numberOfSeedGroups ?? boundary.Area / 24 + 1;
             var seedGroups = boundary
                 .GenerateSeedGroups(numberOfSeeds)
                 .ToHashSet();
