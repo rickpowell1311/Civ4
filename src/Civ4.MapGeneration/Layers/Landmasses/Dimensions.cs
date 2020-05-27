@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Civ4.MapGeneration.Layers.Landmasses
 {
@@ -7,8 +8,6 @@ namespace Civ4.MapGeneration.Layers.Landmasses
         public int Width { get; }
 
         public int Height { get; }
-
-        public int Area => Width * Height;
 
         public Dimensions(int width, int height)
         {

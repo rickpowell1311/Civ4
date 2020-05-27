@@ -14,6 +14,12 @@ namespace Civ4.MapGeneration.Layers.Landmasses
         
         public int MinY { get; }
 
+        public int Width => MaxX - MinX + 1;
+
+        public int Height => MaxY - MinY + 1;
+
+        public int Area => Width * Height;
+
         private HashSet<Coordinate> ContainedCoordinates
         {
             get

@@ -4,29 +4,29 @@
 
 <h1>Civ4 Map Visualizer</h1>
 
-@if (Dimensions != null && Landmass != null)
+@if (Boundary != null && LandTiles != null)
 {
 <div class="grid-container" style="
         display: grid;
-        --grid-cols: @Dimensions.Width;
-        --grid-rows: @Dimensions.Height;
+        --grid-cols: @Boundary.Width;
+        --grid-rows: @Boundary.Height;
         grid-template-rows: repeat(var(--grid-rows), 0fr);
         grid-template-columns: repeat(var(--grid-cols), 0fr)">
-        @for (int j = Dimensions.Height; j >= 0; j--)
+        @for (int j = Boundary.Height; j >= 0; j--)
         {
-            for (int i = 0; i < Dimensions.Width; i++)
+            for (int i = 0; i < Boundary.Width; i++)
             {
-                var isLand = Landmass.Tiles.Any(t => t.Location.X == i && t.Location.Y == j);
+                var isLand = LandTiles.Any(t => t.Location.X == i && t.Location.Y == j);
 
                 if (isLand)
                 {
-                    <div style="background-color:#2da84e; height: 50px; width: 50px">
+                    <div style="background-color:#2da84e; height: 40px; width: 40px; font-size: x-small;">
                         (@i, @j)
                     </div>
                 }
                 else
                 {
-                    <div style="background-color:#1c52d9; height: 50px; width: 50px">
+                    <div style="background-color:#1c52d9; height: 40px; width: 40px; font-size: x-small;">
                         (@i, @j)
                     </div>
                 }
@@ -37,19 +37,22 @@
 
 @code {
 
-    public Landmass Landmass { get; set; }
+    public List<Tile> LandTiles { get; set; }
 
-    public Dimensions Dimensions { get; set; }
+    public Boundary Boundary { get; set; }
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            Console.WriteLine("Generating landmass");
+            Console.WriteLine("Generating world with 2 continents");
 
-            Dimensions = new Dimensions(10, 15);
-            Landmass = Landmass.Build(Dimensions);
-
+            var dimensions = new Dimensions(60, 35);
+            Boundary = Boundary.FromDimensions(dimensions, 0, 0);
+            LandTiles = World.Continents(dimensions, 2)
+                .LandTiles
+                .ToList();
+            
             StateHasChanged();
         }
 

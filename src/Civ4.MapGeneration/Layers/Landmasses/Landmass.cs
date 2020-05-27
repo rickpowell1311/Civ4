@@ -5,22 +5,19 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 {
     public class Landmass
     {
-        public IEnumerable<Tile> Tiles { get; }
+        public IEnumerable<Tile> LandTiles { get; }
 
         private Landmass(IEnumerable<SeedGroup> seedGroups)
         {
-            Tiles = seedGroups
+            LandTiles = seedGroups
                 .SelectMany(x => x.Tiles)
                 .Distinct();
         }
 
-        public static Landmass Build(Dimensions dimensions, int? numberOfSeedGroups = default)
+        public static Landmass Build(Boundary boundary, int? numberOfSeedGroups = default)
         {
-            // Create a boundary for the landmass to be built within - build boundary with positive coordinates for readability
-            var boundary = Boundary.FromDimensions(dimensions, 0, 0);
-
             // Place 1 seed in every 6 tiles if not specified
-            var numberOfSeeds = numberOfSeedGroups ?? dimensions.Area / 6 + 1;
+            var numberOfSeeds = numberOfSeedGroups ?? boundary.Area / 6 + 1;
             var seedGroups = boundary
                 .GenerateSeedGroups(numberOfSeeds)
                 .ToHashSet();
