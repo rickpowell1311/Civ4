@@ -39,16 +39,16 @@ namespace Civ4.MapGeneration.Layers.Landmasses
             if (number == 2)
             {
                 var westContinentalBoundary = worldBoundary
-                    .TrimTop(PolarRegion.PolarHeight + 1)
-                    .TrimBottom(PolarRegion.PolarHeight + 1)
+                    .TrimTop(PolarRegion.PolarHeight + ContinentalRegion.PolarGap)
+                    .TrimBottom(PolarRegion.PolarHeight + ContinentalRegion.PolarGap)
                     .BisectVertically()
                     .Left
                     .TrimLeft(ContinentalRegion.ContinentalOceanGap / 2)
                     .TrimRight(ContinentalRegion.ContinentalOceanGap / 2);
 
                 var eastContinentalBoundary = worldBoundary
-                    .TrimTop(PolarRegion.PolarHeight + 1)
-                    .TrimBottom(PolarRegion.PolarHeight + 1)
+                    .TrimTop(PolarRegion.PolarHeight + ContinentalRegion.PolarGap)
+                    .TrimBottom(PolarRegion.PolarHeight + ContinentalRegion.PolarGap)
                     .BisectVertically()
                     .Right
                     .TrimLeft(ContinentalRegion.ContinentalOceanGap / 2)
