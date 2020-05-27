@@ -97,12 +97,9 @@ namespace Civ4.MapGeneration.Layers.Landmasses
                 return false;
             }
 
-            next = availableTiles
-                .Select(x => new TileChoice(x, _boundary, _chosenTiles))
-                .ChooseOne()
-                .Tile;
-
-            return true;
+            var choices = new TileChoices(availableTiles, _boundary, this);
+            next = choices.ChooseOne();
+            return next != null;
         }
 
         public override string ToString()
