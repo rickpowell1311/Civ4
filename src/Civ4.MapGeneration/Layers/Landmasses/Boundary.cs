@@ -42,7 +42,7 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 
         public static Boundary FromDimensions(Dimensions dimensions, int minX, int minY)
         {
-            return new Boundary(minX + dimensions.Width - 1, minY + dimensions.Width - 1, minX, minY);
+            return new Boundary(minX + dimensions.Width - 1, minY + dimensions.Height - 1, minX, minY);
         }
 
         public IEnumerable<SeedGroup> GenerateSeedGroups(int number)
