@@ -2,44 +2,30 @@
 
 @using Civ4.MapGeneration.Layers.Landmasses;
 
-<h1>Civ4 Map Visualizer</h1>
-
 @if (Boundary != null && LandTiles != null)
 {
-<div class="grid-container" style="
-        display: grid;
-        --grid-cols: @Boundary.Width;
-        --grid-rows: @Boundary.Height;
-        grid-template-rows: repeat(var(--grid-rows), 0fr);
-        grid-template-columns: repeat(var(--grid-cols), 0fr)">
-        @for (int j = Boundary.Height - 1; j >= 0; j--)
-        {
-            for (int i = 0; i < Boundary.Width; i++)
+    <div class="grid-container" style="
+            display: grid;
+            --grid-cols: @Boundary.Width;
+            --grid-rows: @Boundary.Height;
+            grid-template-rows: repeat(var(--grid-rows), 0fr);
+            grid-template-columns: repeat(var(--grid-cols), 0fr)">
+            @for (int j = Boundary.Height - 1; j >= 0; j--)
             {
-                var isLand = LandTiles.Any(t => t.Location.X == i && t.Location.Y == j);
-                var isIce = !isLand ? IceTiles.Any(t => t.Location.X == i && t.Location.Y == j) : false;
+                for (int i = 0; i < Boundary.Width; i++)
+                {
+                    var isLand = LandTiles.Any(t => t.Location.X == i && t.Location.Y == j);
+                    var isIce = !isLand ? IceTiles.Any(t => t.Location.X == i && t.Location.Y == j) : false;
 
-                if (isLand)
-                {
-                    <div style="background-color:#2da84e; height: 20px; width: 20px; font-size: 6px;">
-                        (@i,@j)
-                    </div>
-                }
-                else if (isIce)
-                {
-                    <div style="background-color:#c5d4eb; height: 20px; width: 20px; font-size: 6px;">
-                        (@i,@j)
-                    </div>
-                }
-                else
-                {
-                    <div style="background-color:#1c52d9; height: 20px; width: 20px; font-size: 6px;">
+                    var oceanTileColour = "#1c52d9";
+                    var tileColour = isLand ? "#2da84e" : isIce ? "#c5d4eb" : oceanTileColour;
+
+                    <div style="background-color:@tileColour; height: 20px; width: 20px; font-size: 6px;">
                         (@i,@j)
                     </div>
                 }
             }
-        }
-</div>
+    </div>
 }
 
 @code {
