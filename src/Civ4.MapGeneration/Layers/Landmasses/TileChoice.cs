@@ -9,7 +9,9 @@ namespace Civ4.MapGeneration.Layers.Landmasses
         public Tile Tile { get; }
 
         public bool IsAdjacentToTileGroup { get; }
+
         public bool IsTowardsBoundaryCenterPoint { get; }
+
         public bool IsAlongBoundary { get; }
 
         public TileChoice(Tile tile, bool isAlongBoundary, bool isAdjacentToTileGroup, bool isTowardsBoundaryCenterPoint)

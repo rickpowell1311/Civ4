@@ -43,7 +43,7 @@ namespace Civ4.MapGeneration.Layers.Landmasses
             return choicePicker.Choose();
         }
 
-        private class ChoicePicker<T>
+        public class ChoicePicker<T>
             where T : IEquatable<T>
         {
             private readonly static Random _picker;
@@ -67,24 +67,23 @@ namespace Civ4.MapGeneration.Layers.Landmasses
 
             public T Choose()
             {
-                var totalProbabilityWeighting = Math.Round(_choiceProbabilityWeightings.Values.Sum());
+                var totalProbabilityWeighting = _choiceProbabilityWeightings.Values.Sum();
 
                 var normalizedTileProbabilityWeightings = _choiceProbabilityWeightings
                     .ToDictionary(x => x.Key, x => x.Value / totalProbabilityWeighting);
 
                 var val = _picker.NextDouble();
-                var accum = 0d;
+                var lowerProbabilityBoundary = 0d;
                 foreach (var choiceProbabilityWeighting in normalizedTileProbabilityWeightings)
                 {
-                    var min = accum;
-                    var max = accum + choiceProbabilityWeighting.Value;
+                    var upperProbabilityBoundary = lowerProbabilityBoundary + choiceProbabilityWeighting.Value;
 
-                    if (val > min && val < max)
+                    if (val > lowerProbabilityBoundary && val < upperProbabilityBoundary)
                     {
                         return choiceProbabilityWeighting.Key;
                     }
 
-                    accum += choiceProbabilityWeighting.Value;
+                    lowerProbabilityBoundary += choiceProbabilityWeighting.Value;
                 }
 
                 return default;
